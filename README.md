@@ -1,23 +1,27 @@
-UBUNTU setup 
 
+
+![Alt text](Slack-bolt.png?raw=true "Title")
+
+---------------------local folder UBUNTU/Linux setup----------------
 sudo apt-get update     /    sudo yum update
 sudo apt-get -y upgrade / sudo yum -y upgrade
 
 sudo apt-get install -y python3-pip / sudo yum install -y python3-pip
 sudo apt install python3 python3-venv / sudo yum install python3 python3-venv
 
+//creating a vertual env another method
 mkdir ~/.venv
 python3 -m venv ~/.venv
 source .venv/bin/activate          |      / deactivate
 
 
-//creating a vertual env another method
+// or use this method 
 sudo apt-get install python3-pip
 sudo pip3 install virtualenv 
 virtualenv myvenv 
 source myvenv/bin/activate
 
-
+//install dependancies
 pip install PyGithub
 pip3 install boto3
 pip install GitPython
@@ -26,17 +30,25 @@ pip install slackclient slackeventsapi Flask
 pip3 install boto3
 pip3 install slack_bolt
 
-
+//creae your slack app the get the following details for env file
 export SLACK_APP_TOKEN=
 export SLACK_BOT_TOKEN=
 export SLACK_SIGNING_SECRET=
--------------------------------------------------------
+
+------------------S3 setup-------------------------------------
 create s3 bucket onrampbot
 Create a DDB table 'rampbot' and partition key 'awsid'
 
 run 'python3 ./app/main.py' 
 
-------------ECS setup----------------------------------
+//
+
+-----------------DDB setup--------------------------------------
+create ddb table "rampbot"
+partition key "awsid"
+
+
+------------ECS setup----------------------------------(optional)
 #create requirements.txt file
 source ~/.venvs/slackbot/bin/activate
 pip freeze > requirements.txt   
@@ -51,13 +63,10 @@ pip freeze > requirements.txt
 
 
 #follow push command for ECR 
-
-
-
 aws ecs delete-cluster --cluster slack-interface      
 
 
-----------------------Create slack app-----------------------------
+---------------------Slack app setup-----------------------------
 display_information:
   name: OnRampBot
 features:
@@ -100,3 +109,4 @@ settings:
 ****make sure Socket Mode enable 
 get following env 
 
+----------------------------------------------------
