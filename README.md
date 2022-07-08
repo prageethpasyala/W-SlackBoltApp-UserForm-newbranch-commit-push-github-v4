@@ -2,7 +2,7 @@
 
 ![Alt text](Slack-bolt.png?raw=true "Title")
 
----------------------local folder UBUNTU/Linux setup----------------
+## local folder UBUNTU/Linux setup
 sudo apt-get update     /    sudo yum update
 sudo apt-get -y upgrade / sudo yum -y upgrade
 
@@ -35,21 +35,19 @@ export SLACK_APP_TOKEN=
 export SLACK_BOT_TOKEN=
 export SLACK_SIGNING_SECRET=
 
-------------------S3 setup-------------------------------------
+
+## S3 setup
 create s3 bucket onrampbot
 Create a DDB table 'rampbot' and partition key 'awsid'
-
 run 'python3 ./app/main.py' 
 
-//
-
------------------DDB setup--------------------------------------
+## DDB setup
 create ddb table "rampbot"
 partition key "awsid"
 
 
-------------ECS setup----------------------------------(optional)
-#create requirements.txt file
+## ECS setup (optional)
+create requirements.txt file
 source ~/.venvs/slackbot/bin/activate
 pip freeze > requirements.txt   
 
@@ -66,7 +64,7 @@ pip freeze > requirements.txt
 aws ecs delete-cluster --cluster slack-interface      
 
 
----------------------Slack app setup-----------------------------
+## Slack app setup
 display_information:
   name: OnRampBot
 features:
@@ -109,4 +107,3 @@ settings:
 ****make sure Socket Mode enable 
 get following env 
 
-----------------------------------------------------
