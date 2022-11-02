@@ -10,21 +10,16 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 import datetime , time
 from random import randint
+import requests
 
+# client = boto3.client('ssm',region_name='us-east-1')
+# responseAppToken = client.get_parameter(Name='SLACK_APP_TOKEN')
+# responseBotToken = client.get_parameter(Name='SLACK_BOT_TOKEN')
+responseAppToken = "xapp-1-A040MRJKFRP-4027825090951-53ab1528ade22157435726c1acfb7da752bdbbf2acc7a3414d53ed924c3c1c3c"
+responseBotToken = "xoxb-216810326678-4042493427138-lDFSXwPXu8fGfKeWAPVZPEVp"
 
-# Initializes your app with your bot token and socket mode handler / get token values from parameterstore (https://www.youtube.com/watch?v=8VW8wiVoxjU&ab_channel=EndreSynnes)
-# create ami role with  AWS policy for parameterstore - 'AmazonSSMREadOnlyAccess' 
-# app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
-
-client = boto3.client('ssm',region_name='eu-west-2')
-responseAppToken = client.get_parameter(Name='SLACK_APP_TOKEN')
-responseBotToken = client.get_parameter(Name='SLACK_BOT_TOKEN')
-
-# responseAppToken = "xapp-1-A040MRJKFRP-4027825090951-53ab1528ade22157435726c1acfb7da752bdbbf2acc7a3414d53ed924c3c1c3c"
-# responseBotToken = "xoxb-216810326678-4042493427138-lDFSXwPXu8fGfKeWAPVZPEVp"
-
-app = App(token=responseBotToken['Parameter']['Value'])
-# app = App(token=responseBotToken)
+# app = App(token=responseBotToken['Parameter']['Value'])
+app = App(token=responseBotToken)
 
 
 # Step 5: Payload is sent to this endpoint, we extract the `trigger_id` and call views.open
@@ -218,6 +213,7 @@ def view_submission(ack, body, client, logger, say):
     regex1 = re.compile('[0-9,.]+.')
     regex2 = re.compile('[0-9,.]+.')
 
+    
 
     if len(user_text_2) != 12 and user_text_2.isnumeric() != True:
         say(":warning: *Input ERROR* : Account SharedService Acc number must be 12 digit or all numeric. Please run '/new' command to re-try.",channel="C041ZAP38CQ")
@@ -231,6 +227,7 @@ def view_submission(ack, body, client, logger, say):
         say(":warning: *Input ERROR* : check your GateWay address format. Please run '/new' command to re-try",channel="C041ZAP38CQ")
     elif len(user_text_11) != 12 :
         say(":warning: *Input ERROR* : Account AFT Acc number must be 12 digit. Please run '/new' command to re-try.",channel="C041ZAP38CQ")
+
 
      
    
@@ -247,7 +244,7 @@ def view_submission(ack, body, client, logger, say):
                     },
                     "accessory": {
                         "type": "button",
-                        "action_id": "button_click_4",
+                        "action_id": "button_click_44",
                         "text": {
                             "type": "plain_text",
                             # "emoji": true,
@@ -264,7 +261,7 @@ def view_submission(ack, body, client, logger, say):
                     },
                     "accessory": {
                         "type": "button",
-                        "action_id": "button_click_5",
+                        "action_id": "button_click_55",
                         "text": {
                             "type": "plain_text",
                             # "emoji": true,
@@ -294,11 +291,11 @@ def view_submission(ack, body, client, logger, say):
     
 # # ---------------------------button click continue/save to ddb-------------------------
 
-@app.action("button_click_4")
+@app.action("button_click_44")
 def action_button_click(ack, say):
     ack()
-    dynamodb = boto3.resource('dynamodb', region_name='eu-west-2')
-    table = dynamodb.Table('onrampclient')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    table = dynamodb.Table('serverlessrepo-onramp-form-FormDataTable-13NPSDX8KPSY3')
     user_text_0 = view_submission.var0
     user_text_1 = view_submission.var1
     user_text_2 = view_submission.var2
@@ -320,47 +317,21 @@ def action_button_click(ack, say):
     formId=randint(range_start, range_end)
 
     itemLitList='{"customername":"'+str(user_text_0)+'", "email" : "'+str(user_text_1)+'", "AccountNumber":"'+str(user_text_2)+'", "ext_id":"'+str(user_text_3)+'", "cidr":"'+str(user_text_4)+'", "Whitelist":"'+str(user_text_5)+'", "vpcname":"'+str(user_text_6)+'", "region":"'+str(user_text_8)+'", "env":"'+str(user_text_9)+'", "cgwIP":"'+str(user_text_10)+'", "aft_acct":"'+str(user_text_11)+'" }'
-    table.put_item(Item={'awsid' : str(formId) , 'created':str(created), 'items' : itemLitList  } ) 
+    table.put_item(Item={'formId' : str(formId) , 'created':str(created), 'formData' : itemLitList  } ) 
 
     # table.put_item(Item={'awsid':str(user_text_11),'comp_name':str(user_text_0), 'email' : str(user_text_1), 'sharedacc':str(user_text_2), 'extid':str(user_text_3), 'cidr':str(user_text_4), 'wlist':str(user_text_5), 'vpcname':str(user_text_6), 'region':str(user_text_8), 'env':str(user_text_9), 'gw':str(user_text_10), 'aft':str(user_text_11)})
-
+    
     say(":white_check_mark: Completed \n \n *Thank you for filling out your information!* \n We will look over your details and get back to you soon. \n _OnRamp Team_ \n :smile: Cheers!")
+
+    URL = f"https://5nbdz8lkog.execute-api.us-east-1.amazonaws.com/v1/id?id="
+    headers = {"Contenet-Type": "yourstage/yourpath"}
+    r = requests.request("GET", URL, headers=headers)
+    say(":busts_in_silhouette: Sent ECS task restart request.",channel="C041ZAP38CQ")
     
-@app.action("button_click_5")
+@app.action("button_click_55")
 def action_button_click(ack, say ):
-    ack()
-
-
-    # # for testing only / delete below rows before deployment --------------------------->
-    # dynamodb = boto3.resource('dynamodb', region_name='eu-west-2')
-    # table = dynamodb.Table('onrampclient')
-    # user_text_0 = "CompanyTest north"
-    # user_text_1 = "test2gmail.com"
-    # user_text_2 = "123456789999"
-    # user_text_3 = "pkp2022"
-    # user_text_4 = "10.0.0.0/16"
-    # user_text_5 = "10.0.20.1/32, 10.0.20.2/32"
-    # user_text_6 = "pkp_vpc"
-    # user_text_8 = "eu-west-2"
-    # user_text_9 = "prod"
-    # user_text_10 = "10.0.10.254"
-    # user_text_11 = "800088980045"
-
-    # ts = time.time()
-    # created = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')   
-
-    # n=7
-    # range_start = 10**(n-1)
-    # range_end = (10**n)-1
-    # formId=randint(range_start, range_end)
-
-    # itemLitList='{"customername":"'+str(user_text_0)+'", "email" : "'+str(user_text_1)+'", "AccountNumber":"'+str(user_text_2)+'", "ext_id":"'+str(user_text_3)+'", "cidr":"'+str(user_text_4)+'", "Whitelist":"'+str(user_text_5)+'", "vpcname":"'+str(user_text_6)+'", "region":"'+str(user_text_8)+'", "env":"'+str(user_text_9)+'", "cgwIP":"'+str(user_text_10)+'", "aft_acct":"'+str(user_text_11)+'" }'
-    # table.put_item(Item={'awsid' : str(formId) , 'created':str(created), 'items' : itemLitList  } ) 
-    # 
-    # # testing ends here --------------------------------------------------------------->
-
-    
-    say(":exclamation: *Form reset* \n:bulb: Type  '/new'  to start")
+    ack() 
+    say(":exclamation: *Entered values have been deleted. Please fill it again.* \n:bulb: Type  '/new'  to start")
 
 
 
@@ -368,20 +339,5 @@ def action_button_click(ack, say ):
 
 # Start your app
 if __name__ == "__main__":
-    SocketModeHandler(app, responseAppToken['Parameter']['Value']).start()
-    # SocketModeHandler(app, responseAppToken).start()
-
-    # SocketModeHandler(app, "xapp-1-A03C3SJ0771-3908634067488-2ea3fd89f31b04e0062b79cf4268d3a2288d71e508ac9859d63ffaf39a6f036e").start() 
-
-
-    # https://slack.dev/bolt-python/tutorial/getting-started
-            # run followign command to activate the virtual env
-                #   python3 -m venv .venv
-                #   source .venv/bin/activate
-
-    # type @boltpython hello
-# https://www.youtube.com/watch?v=rUIptoPXu_8&ab_channel=AntonPutra 
-# final version / delpoyied on AWS 05/09/2023
-
-# https://www.youtube.com/watch?v=oDoFvpDftBA&t=220s&ab_channel=PyBites   ---> socketmode - listining to slack inputs 
-# https://www.youtube.com/watch?v=-Vsuzi4OByY&ab_channel=DenysonData ---> salck into fargate
+    # SocketModeHandler(app, responseAppToken['Parameter']['Value']).start()
+    SocketModeHandler(app, responseAppToken).start()

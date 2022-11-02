@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+
+PVTreadME.md
+
 # Crash log files
 crash.log
 
@@ -33,4 +36,4 @@ env
 .env
 *.env
 Docker*
-requirment*
+requir*

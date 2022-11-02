@@ -1,8 +1,0 @@
-comp_name = "Delaware north"
-email = "prageethpasyala@gmail.com"
-awsaccnum = "12345678"
-extid = "pkp"
-cidr = "10.0.0.0/16"
-whitelist = "10.2.3.2/32"
-vpcname = "pkp_vpc"
-region = "eu-west-2"

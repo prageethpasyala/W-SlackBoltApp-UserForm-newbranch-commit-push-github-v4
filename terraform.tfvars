@@ -1,8 +1,0 @@
-comp_name = "2"
-email = "2"
-awsaccnum = "2"
-extid = "2"
-cidr = "2"
-whitelist = "2"
-vpcname = "2"
-region = "eu-west-2"
