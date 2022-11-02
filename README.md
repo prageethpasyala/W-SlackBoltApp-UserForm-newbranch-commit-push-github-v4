@@ -1,6 +1,6 @@
 <h1><b>SLACKBOT UserForm GUI</b></h1>
 
-<i>VERSION UPDATE: Remove the create terrafrom.tfvar file GitHub functionalities.</i>
+<i>VERSION UPDATE: Remove the create terrafrom.tfvar file GitHub functionalities  from the previous version.</i>
 
 The app is providing a user-friendly GUI application form with input text boxes, drop-down menus and buttons to insert user information. Once submit the data it will store directly in the dynamodb table 
 with help of a lambda function.
