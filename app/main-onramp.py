@@ -15,8 +15,8 @@ import requests
 # client = boto3.client('ssm',region_name='us-east-1')
 # responseAppToken = client.get_parameter(Name='SLACK_APP_TOKEN')
 # responseBotToken = client.get_parameter(Name='SLACK_BOT_TOKEN')
-responseAppToken = "xapp-1-A040MRJKFRP-4027825090951-53ab1528ade22157435726c1acfb7da752bdbbf2acc7a3414d53ed924c3c1c3c"
-responseBotToken = "xoxb-216810326678-4042493427138-lDFSXwPXu8fGfKeWAPVZPEVp"
+responseAppToken = "xapp-1-"
+responseBotToken = "xoxb-"
 
 # app = App(token=responseBotToken['Parameter']['Value'])
 app = App(token=responseBotToken)
