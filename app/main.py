@@ -223,7 +223,7 @@ def view_submission(ack, body, client, logger, say):
 # ---------------------------------------------------------
 # -------create a new folder with client id num in S3 and upload the tfvars file ----->
     #  it has to be encoded to do this
-    string = "dfghj"
+    string = 'vpc_tags = { \n' +''+'Name = "'+vpcname+'"\n'+''+'}\n'+''+'cidr = "'+cidr+'" \n'+''+ 'vpcname = "'+vpcname+'"\n'+''+ 'region = "'+region+'" \n'     
     encoded_string = string.encode("utf-8")
 
     bucket_name = "onrampbot"
@@ -283,9 +283,6 @@ def action_button_click(ack, say ):
     dynamodb = boto3.resource('dynamodb', region_name='eu-west-2')
     table = dynamodb.Table('rampbot')
 
-
-
-
     s3 = boto3.resource('s3')
     bucket = s3.Bucket('onrampbot') # just Bucket name
     file_name = 'clientrecord.json'      # full file path
@@ -333,7 +330,7 @@ def action_button_click(ack, say ):
 
         # --------------------------------Git Action---------------------------------
         # initializing git repo
-        g = Github('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')
+        g = Github('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')
         repo = g.get_repo("prageethpasyala/Onramp-ClientRepo-Slackapp")
 
         # calling branch name from ddb accid
