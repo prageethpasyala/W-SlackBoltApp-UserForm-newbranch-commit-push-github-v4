@@ -20,25 +20,67 @@ with help of a lambda function.
     python3 -m venv .venv
     source .venv/bin/activate   (type "deactivate" to deactivate the env)
 
-**Install all dependencies** 
-    > pip install --upgrade pip
-    > pip install slackclient slackeventsapi Flask
-    > pip3 install boto3
-    > pip3 install slack_bolt
-    > python -m pip install requests
-    > pip install GitPython
+**Install all dependencies** <br />
+```
+    pip install --upgrade pip
+    pip install slackclient slackeventsapi Flask
+    pip3 install boto3
+    pip3 install slack_bolt
+    python -m pip install requests
+    pip install GitPython
+```
 
+***Slack app setup***
+```
+    display_information:
+    name: OnRampBot
+    features:
+    bot_user:
+        display_name: OnRampBot
+        always_online: false
+    shortcuts:
+        - name: Onramp request
+        type: global
+        callback_id: onramp
+        description: aws lambda requests
+    slash_commands:
+        - command: /add
+        description: Insert the client deatils
+        should_escape: false
+    oauth_config:
+    scopes:
+        bot:
+        - channels:history
+        - chat:write
+        - groups:history
+        - im:history
+        - mpim:history
+        - incoming-webhook
+        - commands
+    settings:
+    event_subscriptions:
+        bot_events:
+        - message.channels
+        - message.groups
+        - message.im
+        - message.mpim
+    interactivity:
+        is_enabled: true
+    org_deploy_enabled: false
+    socket_mode_enabled: true
+    token_rotation_enabled: false
+```
 
-**creae your slack app and get following details for env file**
-export SLACK_APP_TOKEN=
-export SLACK_BOT_TOKEN=
-export SLACK_SIGNING_SECRET=
+Note: make sure Socket Mode enable 
+
 
 **Before dockersing the code required to create the requirement file**
+```
     pip3 freeze > requirements.txt
-**Create the Docker file in the root directory**
+```
+**Create the Docker file in the root directory** <br />
     Dockerfile
-    ```
+```
         FROM python:3.8
 
         <!-- Creating the working dir in the container -->
@@ -55,7 +97,7 @@ export SLACK_SIGNING_SECRET=
 
         <!-- setting startup file to run -->
         CMD ["python", "./app/main-onramp.py"]
-
+```
 
 ***When you test in the local docker container use the folowing steps (optional)***
     
@@ -172,14 +214,14 @@ export SLACK_SIGNING_SECRET=
 ```    
 
 
-***Create Paramater Store toekns*** <br />
+***Create following items in Paramater Store*** <br />
 ```
-    SLACK_APP_TOKEN <br />
-    SLACK_BOT_TOKEN <br />
+    SLACK_APP_TOKEN 
+    SLACK_BOT_TOKEN 
 ```
 
-***create ECS cluster -  fargate - add ECS-SlackBot role*** <br />
-***create a fargate task definition***
+***create ECS fargate cluster with created role ECS-SlackBot*** <br />
+***create a fargate task definition with created image on ECR repo***
 ```
     Attached the created role ECS-SlackBot and ECR repo image uri - ref:(https://www.youtube.com/watch?v=-Vsuzi4OByY&ab_channel=DenysonData)
     run the task - make sure your sg inbound configured to 80
@@ -205,47 +247,6 @@ export SLACK_SIGNING_SECRET=
     partition key "awsid"
 ```
 
-***Slack app setup***
-```
-    display_information:
-    name: OnRampBot
-    features:
-    bot_user:
-        display_name: OnRampBot
-        always_online: false
-    shortcuts:
-        - name: Onramp request
-        type: global
-        callback_id: onramp
-        description: aws lambda requests
-    slash_commands:
-        - command: /add
-        description: Insert the client deatils
-        should_escape: false
-    oauth_config:
-    scopes:
-        bot:
-        - channels:history
-        - chat:write
-        - groups:history
-        - im:history
-        - mpim:history
-        - incoming-webhook
-        - commands
-    settings:
-    event_subscriptions:
-        bot_events:
-        - message.channels
-        - message.groups
-        - message.im
-        - message.mpim
-    interactivity:
-        is_enabled: true
-    org_deploy_enabled: false
-    socket_mode_enabled: true
-    token_rotation_enabled: false
-```
 
-Note: make sure Socket Mode enable 
 
 
