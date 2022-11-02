@@ -12,14 +12,14 @@ import datetime , time
 from random import randint
 import requests
 
-# client = boto3.client('ssm',region_name='us-east-1')
-# responseAppToken = client.get_parameter(Name='SLACK_APP_TOKEN')
-# responseBotToken = client.get_parameter(Name='SLACK_BOT_TOKEN')
-responseAppToken = "xapp-1-"
-responseBotToken = "xoxb-"
+client = boto3.client('ssm',region_name='us-east-1')
+responseAppToken = client.get_parameter(Name='SLACK_APP_TOKEN')
+responseBotToken = client.get_parameter(Name='SLACK_BOT_TOKEN')
+apptoken=responseAppToken['Parameter']['Value']
+bottoken=responseBotToken['Parameter']['Value']
 
-# app = App(token=responseBotToken['Parameter']['Value'])
-app = App(token=responseBotToken)
+app = App(token=bottoken)
+# app = App(token=responseBotToken)
 
 
 # Step 5: Payload is sent to this endpoint, we extract the `trigger_id` and call views.open
@@ -339,5 +339,5 @@ def action_button_click(ack, say ):
 
 # Start your app
 if __name__ == "__main__":
-    # SocketModeHandler(app, responseAppToken['Parameter']['Value']).start()
-    SocketModeHandler(app, responseAppToken).start()
+    SocketModeHandler(app, apptoken).start()
+    # SocketModeHandler(app, responseAppToken).start()
